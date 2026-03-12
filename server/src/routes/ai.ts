@@ -1,13 +1,20 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import OpenAI from "openai";
 
 export const aiRouter = Router();
+
+const summarizeLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 20,
+  message: { error: "Too many summarize requests. Try again in an hour." },
+});
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-aiRouter.post("/summarize", async (req, res) => {
+aiRouter.post("/summarize", summarizeLimiter, async (req, res) => {
   const { note } = req.body as { note?: string };
 
   if (!note || typeof note !== "string") {

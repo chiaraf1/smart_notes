@@ -6,16 +6,17 @@ import { aiRouter } from "./routes/ai.js";
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+// Allow the frontend origin (Netlify in prod, Vite dev server locally)
+app.use(cors({ origin: process.env.CLIENT_URL ?? "http://localhost:5173" }));
 app.use(express.json());
 
 // health check
 app.get("/health", (_, res) => res.json({ ok: true }));
 
-// notes routes
 app.use("/notes", notesRouter);
 app.use("/ai", aiRouter);
 
-app.listen(3001, () =>
-  console.log("Server running on http://localhost:3001")
+const port = process.env.PORT ?? 3001;
+app.listen(port, () =>
+  console.log(`Server running on http://localhost:${port}`)
 );

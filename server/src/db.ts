@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 
 //  creates a local file-based database
-export const db = new Database("smart-notes.db");
+export const db = new Database(process.env.DB_PATH ?? "smart-notes.db");
 
 // Create table if it doesn't exist
 db.exec(`
