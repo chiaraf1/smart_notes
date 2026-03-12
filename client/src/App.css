@@ -1,5 +1,48 @@
+:root {
+  --border: #e5e5e5;
+  --bg: #f5f5f5;
+  --bg-surface: #fff;
+  --bg-pre: #fafafa;
+  --text: #111;
+  --text-muted: #666;
+  --text-delete: #999;
+  --active-border: #111;
+  --error-bg: #fff2f2;
+  --error-border: #ffb4b4;
+  --error-text: #7a0000;
+  --toast-bg: #f0fff4;
+  --toast-border: #b4e6c0;
+  --toast-text: #1a5c2a;
+  --delete-hover-bg: #fff2f2;
+  --delete-hover-color: #c00;
+}
+
+[data-theme="dark"] {
+  --border: #2d2d2d;
+  --bg: #0f0f0f;
+  --bg-surface: #1c1c1e;
+  --bg-pre: #252525;
+  --text: #e8e8e8;
+  --text-muted: #8a8a8a;
+  --text-delete: #555;
+  --active-border: #e8e8e8;
+  --error-bg: #1f0a0a;
+  --error-border: #5c2020;
+  --error-text: #f08080;
+  --toast-bg: #0a1f10;
+  --toast-border: #1a5c2a;
+  --toast-text: #6cd68a;
+  --delete-hover-bg: #1f0a0a;
+  --delete-hover-color: #f08080;
+}
+
 * { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: var(--bg);
+  color: var(--text);
+}
 
 .layout {
   display: grid;
@@ -14,15 +57,16 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
 }
 
-.topbarTitle { font-weight: 700; }
-.topbarRight { flex: 1; }
+.topbarTitle { font-weight: 700; flex: 1; }
 
 .sidebar {
-  border-right: 1px solid #e5e5e5;
+  border-right: 1px solid var(--border);
   padding: 12px;
+  background: var(--bg-surface);
 }
 
 .sidebarHeader {
@@ -43,14 +87,14 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 .noteItem {
   display: flex;
   align-items: center;
-  border: 1px solid #e5e5e5;
-  background: white;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
   border-radius: 10px;
   overflow: hidden;
 }
 
 .noteItem.active {
-  border-color: #111;
+  border-color: var(--active-border);
 }
 
 .noteItemBtn {
@@ -61,10 +105,11 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   border: none;
   cursor: pointer;
   min-width: 0;
+  color: var(--text);
 }
 
 .noteItemTitle { font-weight: 600; }
-.noteItemMeta { font-size: 12px; color: #666; margin-top: 2px; }
+.noteItemMeta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
 .noteItemDelete {
   flex-shrink: 0;
@@ -75,30 +120,32 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   background: none;
   border-radius: 6px;
   cursor: pointer;
-  color: #999;
+  color: var(--text-delete);
   display: grid;
   place-items: center;
   font-size: 12px;
 }
 
-.noteItemDelete:hover { background: #fff2f2; color: #c00; }
+.noteItemDelete:hover { background: var(--delete-hover-bg); color: var(--delete-hover-color); }
 
 .searchInput {
   width: 100%;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
   font-size: 13px;
   margin-bottom: 10px;
   outline: none;
+  background: var(--bg-surface);
+  color: var(--text);
 }
 
-.searchInput:focus { border-color: #aaa; }
+.searchInput:focus { border-color: var(--active-border); }
 
 .toast {
-  border: 1px solid #b4e6c0;
-  background: #f0fff4;
-  color: #1a5c2a;
+  border: 1px solid var(--toast-border);
+  background: var(--toast-bg);
+  color: var(--toast-text);
   padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 12px;
@@ -106,6 +153,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 
 .main {
   padding: 16px;
+  background: var(--bg);
 }
 
 .mainHeader {
@@ -117,24 +165,35 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 }
 
 .h1 { margin: 0; font-size: 18px; }
-.muted { color: #666; font-size: 12px; }
-.mutedPad { color: #666; padding: 12px 0; }
+.muted { color: var(--text-muted); font-size: 12px; }
+.mutedPad { color: var(--text-muted); padding: 12px 0; }
 
 .actions { display: flex; gap: 10px; }
 
 .btn, .smallBtn, .iconBtn {
-  border: 1px solid #e5e5e5;
-  background: white;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text);
   border-radius: 10px;
   padding: 10px 12px;
   cursor: pointer;
+  transition: border-color 0.1s, opacity 0.1s;
+}
+
+.btn:hover:not(:disabled), .smallBtn:hover:not(:disabled), .iconBtn:hover:not(:disabled) {
+  border-color: var(--text-muted);
+}
+
+.btn:disabled, .smallBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .smallBtn { padding: 6px 10px; font-size: 12px; }
-.iconBtn { width: 40px; height: 40px; display: grid; place-items: center; }
+.iconBtn { width: 40px; height: 40px; display: grid; place-items: center; padding: 0; }
 
 .btn.primary {
-  border-color: #111;
+  border-color: var(--active-border);
 }
 
 .grid {
@@ -144,10 +203,10 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 }
 
 .card {
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
-  background: white;
+  background: var(--bg-surface);
   min-height: 420px;
 }
 
@@ -156,38 +215,48 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 .textarea {
   width: 100%;
   height: 360px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
   resize: vertical;
   font-size: 14px;
+  background: var(--bg-surface);
+  color: var(--text);
+  font-family: inherit;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--text-muted);
 }
 
 .output { display: grid; gap: 12px; }
 .row { display: grid; gap: 6px; }
 
-.label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: .06em; }
+.label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
 .value { font-weight: 700; }
 
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { border: 1px solid #e5e5e5; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+.tag { border: 1px solid var(--border); padding: 4px 8px; border-radius: 999px; font-size: 12px; }
 
 .pre {
   margin: 0;
   white-space: pre-wrap;
-  background: #fafafa;
-  border: 1px solid #e5e5e5;
+  background: var(--bg-pre);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
   font-size: 13px;
+  color: var(--text);
+  font-family: inherit;
 }
 
 .list { margin: 0; padding-left: 18px; }
 
 .error {
-  border: 1px solid #ffb4b4;
-  background: #fff2f2;
-  color: #7a0000;
+  border: 1px solid var(--error-border);
+  background: var(--error-bg);
+  color: var(--error-text);
   padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 12px;
@@ -200,8 +269,9 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
 .drawerOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.4);
   display: none;
+  z-index: 100;
 }
 
 .drawerOverlay.open { display: block; }
@@ -210,7 +280,7 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   width: 85%;
   max-width: 320px;
   height: 100%;
-  background: white;
+  background: var(--bg-surface);
   padding: 12px;
 }
 
@@ -218,23 +288,23 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   display: flex;
   align-items: center;
   justify-content: space-between;
-margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .drawerFooter {
-margin-top: 10px;
+  margin-top: 10px;
 }
 
 @media (max-width: 900px) {
-.layout {
+  .layout {
     grid-template-columns: 1fr;
-}
+  }
 
-.topbar { display: flex; }
-.desktopOnly { display: none; }
-.mobileOnly { display: block; }
+  .topbar { display: flex; }
+  .desktopOnly { display: none; }
+  .mobileOnly { display: block; }
 
-.grid { grid-template-columns: 1fr; }
-.card { min-height: auto; }
-.textarea { height: 240px; }
+  .grid { grid-template-columns: 1fr; }
+  .card { min-height: auto; }
+  .textarea { height: 240px; }
 }

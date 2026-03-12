@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   NoteListItem,
   NoteRecord,
@@ -35,10 +35,28 @@ export default function App() {
   // Mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Dark mode
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      darkMode ? "dark" : "light"
+    );
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
   const wordCount = useMemo(() => {
     const t = noteText.trim();
     return t ? t.split(/\s+/).length : 0;
   }, [noteText]);
+
+  const readingTime = useMemo(() => {
+    if (wordCount < 100) return null;
+    return `~${Math.ceil(wordCount / 200)} min read`;
+  }, [wordCount]);
 
   const filteredNotes = useMemo(() => {
     if (!searchQuery.trim()) return notes;
@@ -133,7 +151,6 @@ export default function App() {
       };
 
       if (selectedId !== null) {
-        // Update existing note
         const r = await fetch(`${API_BASE}/notes/${selectedId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -143,7 +160,6 @@ export default function App() {
         await fetchNotesList();
         setToast("Note updated");
       } else {
-        // Create new note
         const r = await fetch(`${API_BASE}/notes`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -159,6 +175,14 @@ export default function App() {
     } finally {
       setSaving(false);
     }
+  }
+
+  function newNote() {
+    setActive(null);
+    setSelectedId(null);
+    setNoteText("");
+    setAi(null);
+    setError("");
   }
 
   async function deleteNote(id: number) {
@@ -187,6 +211,37 @@ export default function App() {
       setDeleting(null);
     }
   }
+
+  // Keyboard shortcuts — use refs so the effect never needs to re-run
+  const stateRef = useRef({ noteText, ai, loadingAI, loadingNote, saving });
+  stateRef.current = { noteText, ai, loadingAI, loadingNote, saving };
+
+  const actionsRef = useRef({ saveNote, summarize, newNote });
+  actionsRef.current = { saveNote, summarize, newNote };
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      const mod = e.metaKey || e.ctrlKey;
+      if (!mod) return;
+      const { noteText, ai, loadingAI, loadingNote, saving } = stateRef.current;
+      const { saveNote, summarize, newNote } = actionsRef.current;
+
+      if (e.key === "s") {
+        e.preventDefault();
+        if (noteText.trim() && ai && !loadingAI && !loadingNote && !saving) {
+          saveNote();
+        }
+      } else if (e.key === "n") {
+        e.preventDefault();
+        if (!loadingAI && !loadingNote && !saving) newNote();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (noteText.trim() && !loadingAI) summarize();
+      }
+    }
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   // On first load: fetch list and auto-open newest
   useEffect(() => {
@@ -237,6 +292,17 @@ export default function App() {
     ));
   }
 
+  const darkToggle = (
+    <button
+      className="iconBtn"
+      onClick={() => setDarkMode((d) => !d)}
+      aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+      title={darkMode ? "Light mode" : "Dark mode"}
+    >
+      {darkMode ? "☀" : "☽"}
+    </button>
+  );
+
   return (
     <div className="layout">
       {/* Mobile topbar */}
@@ -249,13 +315,14 @@ export default function App() {
           ☰
         </button>
         <div className="topbarTitle">Smart Notes</div>
-        <div className="topbarRight" />
+        {darkToggle}
       </header>
 
       {/* Sidebar (desktop) */}
       <aside className="sidebar desktopOnly">
         <div className="sidebarHeader">
           <div className="sidebarTitle">Notes</div>
+          {darkToggle}
         </div>
 
         <input
@@ -270,7 +337,10 @@ export default function App() {
       </aside>
 
       {/* Sidebar drawer (mobile) */}
-      <div className={`drawerOverlay ${sidebarOpen ? "open" : ""}`} onClick={() => setSidebarOpen(false)}>
+      <div
+        className={`drawerOverlay ${sidebarOpen ? "open" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      >
         <div className="drawer" onClick={(e) => e.stopPropagation()}>
           <div className="drawerHeader">
             <div className="sidebarTitle">Notes</div>
@@ -292,7 +362,6 @@ export default function App() {
           />
 
           <div className="sidebarList">{renderNoteList(filteredNotes)}</div>
-
         </div>
       </div>
 
@@ -301,20 +370,17 @@ export default function App() {
         <div className="mainHeader">
           <div>
             <h1 className="h1">Editor</h1>
-            <div className="muted">{wordCount} words</div>
+            <div className="muted">
+              {wordCount} words{readingTime ? ` · ${readingTime}` : ""}
+            </div>
           </div>
 
           <div className="actions">
             <button
               className="btn"
-              onClick={() => {
-                setActive(null);
-                setSelectedId(null);
-                setNoteText("");
-                setAi(null);
-                setError("");
-              }}
+              onClick={newNote}
               disabled={loadingAI || loadingNote || saving}
+              title="New note (⌘N)"
             >
               New
             </button>
@@ -323,6 +389,7 @@ export default function App() {
               className="btn"
               onClick={saveNote}
               disabled={!noteText.trim() || !ai || loadingAI || loadingNote || saving}
+              title={selectedId !== null ? "Update note (⌘S)" : "Save note (⌘S)"}
             >
               {saving ? "Saving…" : selectedId !== null ? "Update" : "Save"}
             </button>
@@ -331,6 +398,7 @@ export default function App() {
               className="btn primary"
               onClick={summarize}
               disabled={!noteText.trim() || loadingAI}
+              title="Summarize with AI (⌘↵)"
             >
               {loadingAI ? "Summarizing…" : "Summarize"}
             </button>
