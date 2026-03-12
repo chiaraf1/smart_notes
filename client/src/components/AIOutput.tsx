@@ -3,9 +3,11 @@ import type { SummarizeResponse } from "../types";
 type Props = {
   ai: SummarizeResponse | null;
   loading: boolean;
+  onTagClick: (tag: string) => void;
+  onTitleChange: (title: string) => void;
 };
 
-export function AIOutput({ ai, loading }: Props) {
+export function AIOutput({ ai, loading, onTagClick, onTitleChange }: Props) {
   return (
     <section className="card">
       <div className="cardTitle">AI Output</div>
@@ -18,14 +20,27 @@ export function AIOutput({ ai, loading }: Props) {
         <div className="output">
           <div className="row">
             <div className="label">Title</div>
-            <div className="value">{ai.title}</div>
+            <input
+              className="authInput"
+              style={{ fontSize: "0.95rem", padding: "0.3rem 0.5rem" }}
+              value={ai.title}
+              onChange={(e) => onTitleChange(e.target.value)}
+            />
           </div>
 
           <div className="row">
             <div className="label">Tags</div>
             <div className="tags">
               {ai.tags.map((t) => (
-                <span key={t} className="tag">{t}</span>
+                <span
+                  key={t}
+                  className="tag"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => onTagClick(t)}
+                  title={`Filter by "${t}"`}
+                >
+                  {t}
+                </span>
               ))}
             </div>
           </div>

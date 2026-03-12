@@ -120,6 +120,10 @@ export function useNoteEditor(
     setError("");
   }
 
+  function setTitle(title: string) {
+    setAi((prev) => prev ? { ...prev, title } : prev);
+  }
+
   function clearError() {
     setError("");
   }
@@ -128,6 +132,7 @@ export function useNoteEditor(
     noteText,
     setNoteText,
     ai,
+    setTitle,
     loadingAI,
     saving,
     toast,

@@ -129,7 +129,12 @@ export function DashboardPage() {
             wordCount={editor.wordCount}
             readingTime={editor.readingTime}
           />
-          <AIOutput ai={editor.ai} loading={editor.loadingAI} />
+          <AIOutput
+            ai={editor.ai}
+            loading={editor.loadingAI}
+            onTagClick={(tag) => notes.setSearchQuery(tag)}
+            onTitleChange={editor.setTitle}
+          />
         </div>
       </main>
     </div>

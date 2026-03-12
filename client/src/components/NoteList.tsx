@@ -52,7 +52,9 @@ export function NoteList({
           </button>
           <button
             className="noteItemDelete"
-            onClick={() => onDelete(n.id)}
+            onClick={() => {
+              if (confirm("Delete this note?")) onDelete(n.id);
+            }}
             disabled={deleting === n.id}
             aria-label="Delete note"
           >
