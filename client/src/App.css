@@ -429,3 +429,45 @@ body {
   .card { min-height: auto; }
   .textarea { height: 240px; }
 }
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.skeletonItem {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonTitle {
+  height: 14px;
+  width: 70%;
+  background: var(--border);
+  border-radius: 6px;
+}
+
+.skeletonMeta {
+  height: 11px;
+  width: 45%;
+  background: var(--border);
+  border-radius: 6px;
+}
+
+/* Empty state */
+.emptyState {
+  padding: 24px 8px;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+
+.emptyStateIcon { font-size: 28px; }
+.emptyStateText { font-weight: 600; color: var(--text); }
+.emptyStateHint { font-size: 12px; color: var(--text-muted); }

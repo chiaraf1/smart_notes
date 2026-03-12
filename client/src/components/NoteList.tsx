@@ -21,10 +21,25 @@ export function NoteList({
   onSelect,
   onDelete,
 }: Props) {
+  if (loading) {
+    return (
+      <>
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="skeletonItem">
+            <div className="skeletonTitle" />
+            <div className="skeletonMeta" />
+          </div>
+        ))}
+      </>
+    );
+  }
+
   if (items.length === 0 && !searchQuery.trim()) {
     return (
-      <div className="mutedPad">
-        {loading ? "Loading…" : "No notes yet."}
+      <div className="emptyState">
+        <div className="emptyStateIcon">📝</div>
+        <div className="emptyStateText">No notes yet</div>
+        <div className="emptyStateHint">Write something and click Summarize to get started</div>
       </div>
     );
   }
