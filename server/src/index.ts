@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import { notesRouter } from "./routes/notes.js";
 import { aiRouter } from "./routes/ai.js";
+import { authRouter } from "./routes/auth.js";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 // health check
 app.get("/health", (_, res) => res.json({ ok: true }));
 
+app.use("/auth", authRouter);
 app.use("/notes", notesRouter);
 app.use("/ai", aiRouter);
 

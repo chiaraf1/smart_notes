@@ -1,6 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import OpenAI from "openai";
+import { requireAuth } from "../middleware/auth.js";
 
 export const aiRouter = Router();
 
@@ -14,7 +15,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-aiRouter.post("/summarize", summarizeLimiter, async (req, res) => {
+aiRouter.post("/summarize", requireAuth, summarizeLimiter, async (req, res) => {
   const { note } = req.body as { note?: string };
 
   if (!note || typeof note !== "string") {

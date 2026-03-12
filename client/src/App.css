@@ -67,6 +67,8 @@ body {
   border-right: 1px solid var(--border);
   padding: 12px;
   background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebarHeader {
@@ -282,6 +284,8 @@ body {
   height: 100%;
   background: var(--bg-surface);
   padding: 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .drawerHeader {
@@ -293,6 +297,123 @@ body {
 
 .drawerFooter {
   margin-top: 10px;
+}
+
+/* Sidebar footer (user + sign out) */
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sidebarUser {
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Auth screen */
+.authLayout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 16px;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.authLogo {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.authTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--text);
+}
+
+.authField {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.authLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.authInput {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  background: var(--bg-surface);
+  color: var(--text);
+  width: 100%;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.authInput:focus {
+  border-color: var(--active-border);
+}
+
+.authBtn {
+  width: 100%;
+  background: var(--text);
+  color: var(--bg-surface);
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity 0.1s;
+}
+
+.authBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.authSwitch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.authLink {
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
 }
 
 @media (max-width: 900px) {
