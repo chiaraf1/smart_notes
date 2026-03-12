@@ -5,6 +5,8 @@
 // the same typing in every test that needs an authenticated user.
 Cypress.Commands.add("login", (email: string, password: string) => {
   cy.visit("/");
+  // The app now shows a landing page first — click "Log in" to get to the auth form
+  cy.contains("Log in").click();
   cy.get("#auth-email").type(email);
   cy.get("#auth-password").type(password);
   cy.get(".authBtn").click();

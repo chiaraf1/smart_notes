@@ -9,14 +9,15 @@ const password = "password123";
 
 describe("Authentication", () => {
 
-  // Before every test, clear localStorage so we always start logged out.
-  // This simulates a fresh user visiting the site for the first time.
+  // Before every test, clear localStorage and navigate to the landing page.
+  // Then click "Log in" to get to the auth form — the app now shows a landing page first.
   beforeEach(() => {
     cy.clearLocalStorage();
     cy.visit("/");
+    cy.contains("Log in").click();
   });
 
-  // TEST 1: The login page should show up when you're not logged in.
+  // TEST 1: The login page should show up after clicking Log in.
   // Why: If the auth page doesn't render, nothing else can work.
   it("shows the login form on first visit", () => {
     cy.get(".authCard").should("exist");
